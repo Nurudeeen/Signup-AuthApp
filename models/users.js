@@ -5,12 +5,12 @@ const Schema = mongoose.Schema;
 const UserSchema = new Schema({
     Username: {
         type: String,
-        required: [true, 'Name field is required']
+        //required: [true, 'Name field is required']
     },
     age: {
         type: Number
     },
-    img:
+    image:
     {
         data: Buffer,
         contentType: String
