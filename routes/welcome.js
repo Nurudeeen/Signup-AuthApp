@@ -19,9 +19,8 @@ welcome.post("/login", async (req, res) => {
       const { Username, password } = req.body;
   
       // Validate user input
-      if (!(Username && password)) {
-        res.status(400).send("All input is required");
-      }
+      if (!(Username && password)) return res.status(400).send("All input is required");
+      
       // Validate if user exist in our database
       const user = await Users.findOne({ Username });
   

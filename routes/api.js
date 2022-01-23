@@ -2,6 +2,7 @@ const express = require ('express');
 const router = express.Router();
 const Users = require('../models/users');
 
+const bcrypt = require("bcryptjs");
 // get a list of user from the db
 router.get('/All', function(req, res, next){
     Users.find({}).then(function(ninjas){
@@ -11,9 +12,12 @@ router.get('/All', function(req, res, next){
 
 // update a user in the db
 router.put('/update/:id', function(req, res, next){
-    Users.findByIdAndUpdate({_id: req.params.id}, req.body).then(function(){
-        Users.findOne({_id: req.params.id}).then(function(ninja){
-            res.send(ninja);
+    Users.findByIdAndUpdate({_id: req.params.id}, req.body).then(()=>{
+        Users.findOne({_id: req.params.id}).then((user) => {
+            const {password} = req.body;
+            encryptedPassword = bcrypt.hash(password, 10);
+            user.password = encryptedPassword;
+            res.send(user);
         });
     }).catch(next) ; 
 });

@@ -10,7 +10,13 @@ const UserSchema = new Schema({
     age: {
         type: Number
     },
+    img:
+    {
+        data: Buffer,
+        contentType: String
+    },
 
+    joined: { type: Date, default: Date.now() },
     password: { type: String },
 
     token: { type: String },
