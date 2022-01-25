@@ -4,6 +4,12 @@ const mongoose = require('mongoose');
 const multer = require('multer');
 const Users = require('./models/users');
 
+const session = require("express-session");
+const MongoDbStore = require('connect-mongo');
+
+const passport = require("./passport/setup");
+
+
 var fs = require('fs');
 var path = require('path');
 
@@ -13,13 +19,24 @@ require("dotenv").config();
 // set up express app
 const app = express();
 
-
 // connect to mongodb
 mongoose.connect(process.env.MONGO_URL,
     { useNewUrlParser: true, useUnifiedTopology: true }, err => {
         console.log('connected to databases')
     });
 mongoose.Promise = global.Promise;
+
+//Express Session Config
+app.use(
+  session({
+      secret: 'story book',
+      resave: false,
+      saveUninitialized: false,
+      store: MongoDbStore.create({
+          mongoUrl: process.env.MONGO_URL
+      })
+  })
+);
 
 // use body-parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -31,6 +48,10 @@ app.use('/api', require('./routes/api'));
 app.use('/api', require('./routes/post'));
 app.use('/api', require('./routes/getOne'));
 app.use('/api', require('./routes/welcome'));
+app.use("/api", require("./routes/auth"));
+// Passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
 
 // error handling middleware
 app.use(function(err, req, res, next){

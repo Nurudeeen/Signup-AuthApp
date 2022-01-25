@@ -1,6 +1,7 @@
 const express = require ('express');
 const router = express.Router();
 const Users = require('../models/users');
+const auth = require("../middleware/auth");
 
 const bcrypt = require("bcryptjs");
 // get a list of user from the db
@@ -11,7 +12,7 @@ router.get('/All', function(req, res, next){
 });
 
 // update a user in the db
-router.put('/update/:id', function(req, res, next){
+router.put('/update/:id', auth, function(req, res, next){
     Users.findByIdAndUpdate({_id: req.params.id}, req.body).then(()=>{
         Users.findOne({_id: req.params.id}).then((user) => {
             const {password} = req.body;
