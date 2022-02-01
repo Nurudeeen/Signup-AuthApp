@@ -19,4 +19,9 @@ router.post("/register_login", (req, res, next) => {
     })(req, res, next);
 });
 
+router.post('/logout', function(req, res){
+    req.logout();
+    delete req.session;
+    res.redirect('/All');
+  });
 module.exports = router;

@@ -49,6 +49,7 @@ app.use('/api', require('./routes/post'));
 app.use('/api', require('./routes/getOne'));
 app.use('/api', require('./routes/welcome'));
 app.use("/api", require("./routes/auth"));
+app.use("/api", require("./routes/shorten"));
 // Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
@@ -72,16 +73,16 @@ const storage = multer.diskStorage({
   });
 const upload = multer({ storage: storage });
 
-app.get("/",  (req, res) => {
-    Users.find({}, (err, images) => {
-      if (err) {
-          console.log(err);
-          return res.status(500).send("An error occurred", err);
-      } else {
-          res.render("index", {image: images});
-      }
-    });
-  });
+// app.get("/",  (req, res) => {
+//     Users.find({}, (err, images) => {
+//       if (err) {
+//           console.log(err);
+//           return res.status(500).send("An error occurred", err);
+//       } else {
+//           res.render("index", {image: images});
+//       }
+//     });
+//   });
 
 app.post("/uploadPhoto", upload.single("myImage"), (req, res) => {
     const obj = {
